@@ -20,7 +20,11 @@
    - 窗口增强：窗口置顶、双击全屏、90° 旋转、水平镜像、**无边框纯净模式 (OBS Clean Feed)**
    - 本地一键录制 MP4（优先调用 `h264_nvenc` GPU 编码 + AAC-LC 音频，自动保存至 `recordings/`）
 
-## 快速启动
+## 下载
+
+直接从 [Releases](https://github.com/hassyliu/airplay-hassy/releases) 下载 `AirPlay-Hassy.exe`（Windows 10/11 x64，单文件免安装），双击运行即可。
+
+## 从源码运行
 
 ### 1. 编译 Rust 引擎（如已编译过可跳过）
 ```powershell
@@ -36,7 +40,12 @@ python run.py
 ### 3. 连接 iPhone / iPad
 1. 确保 iOS 设备与电脑处于**同一局域网 / Wi-Fi**（建议 5GHz Wi-Fi 或电脑网线连接以跑满 2K/4K 60fps 码率）。
 2. 在 iOS 控制中心点击 **「屏幕镜像」**，选择 **`AirPlay-Hassy`**（可在左侧面板自定义名称）。
-3. 修改分辨率 / 帧率 / HEVC 后，点击 **「应用画质并重启 AirPlay 服务」**，然后在 iOS 端重新连接一次镜像即可按新画质协商推流。
+3. 修改分辨率 / 帧率 / HEVC 后，点击「画质」页底部的 **「应用并重启服务」**，然后在 iOS 端重新连接一次镜像即可按新画质协商推流。
+
+### 4. 打包 EXE（可选）
+```powershell
+.\build_exe.ps1   # 输出 dist\AirPlay-Hassy.exe
+```
 
 ## 快捷键
 
@@ -45,7 +54,7 @@ python run.py
 | `Tab` | 收起 / 展开左侧画质控制面板 |
 | `B` | 切换无边框纯净模式（OBS 窗口捕获推荐） |
 | `F11` / 双击画面 | 进入 / 退出全屏 |
-| `Esc` | 退出全屏或纯净模式 |
+| `Esc` | 退出全屏或纯净模式（纯净模式下 `B` / `Tab` / 右键菜单同样可退出） |
 | `T` | 窗口置顶开关 |
 | `R` | 画面顺时针旋转 90° |
 | `M` | 水平镜像开关 |
@@ -60,3 +69,15 @@ python run.py
 ```powershell
 New-NetFirewallRule -DisplayName "AirPlay Hassy Engine" -Direction Inbound -Program "$PWD\engine\target\release\airplay-hassy-engine.exe" -Action Allow
 ```
+
+使用 Releases 中的 EXE 时，引擎会被释放到固定路径 `%LOCALAPPDATA%\AirPlay-Hassy\airplay-hassy-engine.exe`，放行该路径即可：
+
+```powershell
+New-NetFirewallRule -DisplayName "AirPlay Hassy Engine" -Direction Inbound -Program "$env:LOCALAPPDATA\AirPlay-Hassy\airplay-hassy-engine.exe" -Action Allow
+```
+
+## 许可证
+
+本项目以 [GNU GPL v3.0](LICENSE) 发布。
+
+`engine/src/playfair/` 中的 FairPlay SAP v3 解密实现移植自 [UxPlay](https://github.com/FDH2/UxPlay) 所使用的 playfair 代码，协议流程参考了 UxPlay（GPL-3.0），相关部分版权归原作者所有。
