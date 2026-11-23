@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# PyInstaller output
+build/
+dist/
+
+# Rust
+engine/target/
+
+# Local runtime data
+config.json
+recordings/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
